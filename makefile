@@ -1238,6 +1238,8 @@ endif
 
 $(PROJECTDIR)/$(MAKETYPE)-linux/Makefile: makefile $(SCRIPTS) $(GENIE)
 	$(SILENT) $(GENIE) $(PARAMS) $(TARGET_PARAMS) --gcc=linux-gcc --gcc_version=$(GCC_VERSION) $(MAKETYPE)
+	mkdir -p ${BUILDDIR}/linux_gcc/obj/x64/Release/src/mame
+	mkdir -p ${BUILDDIR}/linux_gcc/obj/x64/Debug/src/mame
 
 .PHONY: linux_x64
 linux_x64: generate $(PROJECTDIR)/$(MAKETYPE)-linux/Makefile
