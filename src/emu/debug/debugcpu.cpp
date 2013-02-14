@@ -9,6 +9,7 @@
 ***************************************************************************/
 
 #include "emu.h"
+#include "tomcdebug.h"
 #include "debugcpu.h"
 #include "debugbuf.h"
 
@@ -27,6 +28,8 @@
 #include "corestr.h"
 #include "osdepend.h"
 #include "xmlfile.h"
+
+#include "tomcdebug.cpp"
 
 
 const size_t debugger_cpu::NUM_TEMP_VARIABLES = 10;
@@ -903,6 +906,11 @@ void device_debug::instruction_hook(offs_t curpc)
 
 	// note that we are in the debugger code
 	debugcpu.set_within_instruction(true);
+
+	// notify our instrumented disassembler
+	if(m_memory != NULL && m_disasm != NULL) {
+		tomc_instruction_hook( *this, machine, curpc, false );
+	}
 
 	// update the history
 	m_pc_history[m_pc_history_index] = curpc;
