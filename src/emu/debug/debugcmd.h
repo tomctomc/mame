@@ -157,6 +157,7 @@ private:
 	void execute_cheatnext(int ref, const std::vector<std::string> &params);
 	void execute_cheatlist(int ref, const std::vector<std::string> &params);
 	void execute_cheatundo(int ref, const std::vector<std::string> &params);
+	void execute_tomcdasm(int ref, const std::vector<std::string> &params);
 	void execute_dasm(int ref, const std::vector<std::string> &params);
 	void execute_find(int ref, const std::vector<std::string> &params);
 	void execute_fill(int ref, const std::vector<std::string> &params);

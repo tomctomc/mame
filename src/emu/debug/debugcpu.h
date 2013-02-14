@@ -14,6 +14,7 @@
 #pragma once
 
 #include <set>
+#include "tomcdebug.h"
 
 
 //**************************************************************************
@@ -156,6 +157,7 @@ public:
 	void reset_transient_flag() { m_flags &= ~DEBUG_FLAG_TRANSIENT; }
 
 	static const int HISTORY_SIZE = 256;
+	friend void tomc_instruction_hook(device_debug &debug, running_machine &machine, offs_t curpc, bool implicit);
 
 	// debugger_cpu helpers
 	void compute_debug_flags();

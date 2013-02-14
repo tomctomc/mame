@@ -11,6 +11,7 @@
 #include "emu.h"
 #include "emuopts.h"
 #include "debugger.h"
+#include "tomcdebug.h"
 #include "debugcmd.h"
 #include "debugcon.h"
 #include "debugcpu.h"
@@ -289,6 +290,7 @@ debugger_commands::debugger_commands(running_machine& machine, debugger_cpu& cpu
 	m_console.register_command("fillo",     CMDFLAG_KEEP_QUOTES, AS_OPCODES, 3, MAX_COMMAND_PARAMS, std::bind(&debugger_commands::execute_fill, this, _1, _2));
 
 	m_console.register_command("dasm",      CMDFLAG_NONE, 0, 3, 5, std::bind(&debugger_commands::execute_dasm, this, _1, _2));
+	m_console.register_command("tomcdasm",  CMDFLAG_NONE, 0, 3, 3, std::bind(&debugger_commands::execute_tomcdasm, this, _1, _2));
 
 	m_console.register_command("trace",     CMDFLAG_NONE, 0, 1, 4, std::bind(&debugger_commands::execute_trace, this, _1, _2));
 	m_console.register_command("traceover", CMDFLAG_NONE, 0, 1, 4, std::bind(&debugger_commands::execute_traceover, this, _1, _2));
@@ -3293,6 +3295,25 @@ void debugger_commands::execute_fill(int ref, const std::vector<std::string> &pa
 				count -= fill_data_size[j];
 		}
 	}
+}
+
+/*-------------------------------------------------
+    execute_tomcdasm - dump an instrumented disassembly
+-------------------------------------------------*/
+
+void debugger_commands::execute_tomcdasm(int ref, const std::vector<std::string> &params)
+{
+	u64 offset, length;
+	address_space *space;
+
+	if (!validate_number_parameter(params[1], offset))
+		return;
+	if (!validate_number_parameter(params[2], length))
+		return;
+	if (!validate_cpu_space_parameter(params.size() > 3 ? params[3].c_str() : nullptr, AS_PROGRAM, space))
+		return;
+	if (debug_tomcdasm(m_machine,*space,params[0].c_str(),offset,length))
+		fprintf(stderr, "Instrumented disassembly successfully saved\n");
 }
 
 
