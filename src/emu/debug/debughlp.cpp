@@ -51,6 +51,7 @@ const help_item f_static_help_list[] =
 		"  Comments\n"
 		"  Cheats\n"
 		"  Image\n"
+		"  tomc\n"
 	},
 	{
 		"general",
@@ -262,6 +263,15 @@ const help_item f_static_help_list[] =
 		"  comsave -- save the current comments to a file\n"
 		"  comlist -- print currently available comments from file\n"
 		"  commit[/*] <address>,<comment> -- gives a bulk comadd then comsave command\n"
+		"\n"
+	},
+	{
+		"tomc",
+		"\n"
+		"tomc debugger commands\n"
+		"Type help <command> for further details on each command\n"
+		"\n"
+		"  tomcdasm <filename>,<address>,<length> -- dumps an instrumented disassembly of the given address range to the given file\n"
 		"\n"
 	},
 	{
@@ -1814,6 +1824,22 @@ const help_item f_static_help_list[] =
 		"\n"
 		"comdelete 10\n"
 		"  Deletes the comment at code address 0x10 (using the current memory bank settings)\n"
+		"\n"
+	},
+	{
+		"tomcdasm",
+		"\n"
+		"  tomcdasm <filename>,<address>,<length>\n"
+		"\n"
+		"Dumps an instrumented disassembly of the given address range to the given file.\n"
+		"This makes use of instrumentaion previously collected by the running emulator\n"
+		"(finds the initial entry point automatically and tries to intelligently distinguish\n"
+		" code from data by simply observing the emulated execution flow).\n"
+		"\n"
+		"Example:\n"
+		"\n"
+		"tomcdasm starraid.asm,a000,2000\n"
+		"  dumps the disassembly of the \"star raiders\" cartridge for the atari 800 (a800 starraid)."
 		"\n"
 	},
 	{
