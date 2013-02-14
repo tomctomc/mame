@@ -141,6 +141,7 @@ private:
 	void execute_cheatlist(const std::vector<std::string_view> &params);
 	void execute_cheatundo(const std::vector<std::string_view> &params);
 	void execute_dasm(const std::vector<std::string_view> &params);
+	void execute_tomcdasm(const std::vector<std::string_view> &params);
 	void execute_find(int spacenum, const std::vector<std::string_view> &params);
 	bool execute_find_try_memory(const std::vector<std::string_view> &params);
 	void execute_fill(int spacenum, const std::vector<std::string_view> &params);

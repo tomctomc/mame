@@ -34,6 +34,7 @@
 #include <cctype>
 #include <fstream>
 #include <sstream>
+#include "tomcdebug.h"
 
 
 
@@ -325,6 +326,7 @@ debugger_commands::debugger_commands(running_machine& machine, debugger_cpu& cpu
 	m_console.register_command("fillo",     CMDFLAG_KEEP_QUOTES, 3, MAX_COMMAND_PARAMS, std::bind(&debugger_commands::execute_fill, this, AS_OPCODES, _1));
 
 	m_console.register_command("dasm",      CMDFLAG_NONE, 3, 5, std::bind(&debugger_commands::execute_dasm, this, _1));
+	m_console.register_command("tomcdasm",  CMDFLAG_NONE, 3, 3, std::bind(&debugger_commands::execute_tomcdasm, this, _1));
 
 	m_console.register_command("trace",     CMDFLAG_NONE, 1, 4, std::bind(&debugger_commands::execute_trace, this, _1, false));
 	m_console.register_command("traceover", CMDFLAG_NONE, 1, 4, std::bind(&debugger_commands::execute_trace, this, _1, true));
@@ -4055,6 +4057,26 @@ bool debugger_commands::execute_fill_try_memory(const std::vector<std::string_vi
 	return true;
 }
 
+/*-------------------------------------------------
+    execute_tomcdasm - dump an instrumented disassembly
+-------------------------------------------------*/
+
+void debugger_commands::execute_tomcdasm(const std::vector<std::string_view> &params)
+{
+	u64 offset, length;
+	address_space *space;
+
+	// validate parameters
+	if (!m_console.validate_number_parameter(params[1], offset))
+		return;
+	if (!m_console.validate_number_parameter(params[2], length))
+		return;
+	if (!m_console.validate_device_space_parameter(params.size() > 3 ? params[3] : std::string_view(), AS_PROGRAM, space))
+		return;
+
+	if (debug_tomcdasm(m_machine,*space,std::string(params[0]).c_str(),offset,length))
+		fprintf(stderr, "Instrumented disassembly successfully saved\n");
+}
 
 /*-------------------------------------------------
     execute_dasm - execute the dasm command

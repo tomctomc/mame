@@ -1029,6 +1029,7 @@ protected:
 	u8                      m_default_bios;         // the default system BIOS
 	std::string             m_default_bios_tag;     // tag of the default system BIOS
 
+	friend void tomc_instruction_hook(device_debug &debug, running_machine &machine, offs_t curpc, bool implicit);
 private:
 	// internal helpers
 	device_t *subdevice_slow(std::string_view tag) const;
