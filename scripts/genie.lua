@@ -565,6 +565,11 @@ configuration { "Debug" }
 		"MAME_PROFILER",
 --      "BGFX_CONFIG_DEBUG=1",
 	}
+configuration { "Debug", "linux-gcc" }
+	buildoptions {
+		"-ggdb",
+		"-O0",
+	}
 
 configuration { }
 

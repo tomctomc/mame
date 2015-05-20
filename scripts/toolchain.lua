@@ -334,6 +334,11 @@ function toolchain(_buildDir, _subDir)
 			"-m32",
 		}
 
+	configuration { "linux-gcc" }
+		buildoptions {
+			"-fPIC",
+		}
+
 	configuration { "linux-gcc", "x32", "Release" }
 		targetdir (_buildDir .. "linux_gcc" .. "/bin/x32/Release")
 
