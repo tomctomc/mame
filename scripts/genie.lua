@@ -567,6 +567,11 @@ if _OPTIONS["PROFILER"]~="0" then
 		"MAME_PROFILER",
 	}
 end
+configuration { "Debug", "linux-gcc" }
+	buildoptions {
+		"-ggdb",
+		"-O0",
+	}
 
 configuration { }
 
