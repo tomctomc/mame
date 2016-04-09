@@ -213,8 +213,8 @@ int x86cpuid_GetFirm(const Cx86cpuid *p);
 #define x86cpuid_GetModel(ver)  (((ver >> 12) &  0xF0) | ((ver >> 4) & 0xF))
 #define x86cpuid_GetStepping(ver) (ver & 0xF)
 
-Bool CPU_Is_InOrder();
-Bool CPU_Is_Aes_Supported();
+Bool CPU_Is_InOrder(void); //TOMCXXX added "void" to avoid c++ compiler error
+Bool CPU_Is_Aes_Supported(void); //TOMCXXX added "void" to avoid c++ compiler error
 
 #endif
 
