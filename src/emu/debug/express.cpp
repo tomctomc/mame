@@ -1391,6 +1391,7 @@ void parsed_expression::parse_string_into_tokens()
 //  expanded operator
 //-------------------------------------------------
 
+#pragma warning ( disable : 4101 ) //TOMCXXX visual studio complained about e not used in catch clause below)
 void parsed_expression::parse_symbol_or_number(parse_token &token, const char *&string)
 {
 	// accumulate a lower-case version of the symbol
