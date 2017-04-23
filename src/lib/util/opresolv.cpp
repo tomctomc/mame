@@ -378,6 +378,16 @@ bool option_resolution::entry::set_value(const std::string &value)
 
 	// looks good!  change the value
 	m_value = value;
+
+	// if the value is an enum, replace with int value
+	if( (int) m_guide_entry.type() == (int) util::option_guide::entry::option_type::ENUM_BEGIN ) {
+		for( auto e = m_enum_value_begin; e != m_enum_value_end; e++ ) {
+			if( !strcmp( value.c_str(), e->identifier() ) ) {
+				m_value = std::to_string(e->parameter());
+			}
+		}
+	}
+
 	return true;
 }
 
