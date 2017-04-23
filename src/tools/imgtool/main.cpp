@@ -855,11 +855,11 @@ static int cmd_listdriveroptions(const struct command *c, int argc, char *argv[]
 
 static const struct command cmds[] =
 {
-	{ "create",             cmd_create,             "<format> <imagename> [--(createoption)=value]", 2, 8, 0},
+	{ "create",             cmd_create,             "<format> <imagename> [--(createoption)=value]", 2, 0xffff, 0},
 	{ "dir",                cmd_dir,                "<format> <imagename> [path]", 2, 3, 0 },
 	{ "get",                cmd_get,                "<format> <imagename> <filename> [newname] [--filter=filter] [--fork=fork]", 3, 6, 0 },
 	{ "put",                cmd_put,                "<format> <imagename> <filename>... <destname> [--(fileoption)==value] [--filter=filter] [--fork=fork]", 3, 0xffff, 0 },
-	{ "getall",             cmd_getall,             "<format> <imagename> [path] [--filter=filter]", 2, 3, 0 },
+	{ "getall",             cmd_getall,             "<format> <imagename> [path] [--filter=filter]", 2, 4, 0 },
 	{ "del",                cmd_del,                "<format> <imagename> <filename>...", 3, 3, 1 },
 	{ "mkdir",              cmd_mkdir,              "<format> <imagename> <dirname>", 3, 3, 0 },
 	{ "rmdir",              cmd_rmdir,              "<format> <imagename> <dirname>...", 3, 3, 1 },
