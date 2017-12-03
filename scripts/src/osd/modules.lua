@@ -433,6 +433,9 @@ function qtdebuggerbuild()
 				MOC = MOCTST
 			end
 		end
+		if MOC == "/usr/bin/moc" then  -- TOMCXXX
+			MOC = MOC .. " -qt=5"      -- TOMCXXX
+		end                            -- TOMCXXX
 
 
 		custombuildtask {
