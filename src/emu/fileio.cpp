@@ -384,6 +384,10 @@ osd_file::error emu_file::open_next()
 		LOG("emu_file: attempting to open '%s' directly\n", m_fullpath);
 		filerr = util::core_file::open(m_fullpath, m_openflags, m_file);
 
+		if (filerr == osd_file::error::NONE) {
+			osd_printf_info("TOMCXXX: open file direct fullpath=<%s>\n", m_fullpath.c_str() );
+		}
+
 		// if we're opening for read-only we have other options
 		if ((osd_file::error::NONE != filerr) && ((m_openflags & (OPEN_FLAG_READ | OPEN_FLAG_WRITE)) == OPEN_FLAG_READ))
 		{
@@ -752,6 +756,7 @@ osd_file::error emu_file::attempt_zipped()
 			util::archive_file::ptr zip;
 			util::archive_file::error ziperr = open_funcs[i](m_fullpath, zip);
 
+			std::string TOMCXXX_archivefullpath = m_fullpath; // TOMCXXX preserve name
 			// chop the archive suffix back off the filename before continuing
 			m_fullpath = m_fullpath.substr(0, dirsep);
 
@@ -788,6 +793,7 @@ osd_file::error emu_file::attempt_zipped()
 				m_hashes.reset();
 				m_hashes.add_crc(m_zipfile->current_crc());
 				m_fullpath = savepath;
+				osd_printf_info("TOMCXXX: open file zipped fullpath=<%s>    file=<%s>\n", TOMCXXX_archivefullpath.c_str(),m_zipfile->current_name().c_str());
 				return (m_openflags & OPEN_FLAG_NO_PRELOAD) ? osd_file::error::NONE : load_zipped_file();
 			}
 
