@@ -810,6 +810,7 @@ void core_options::set_description(std::string_view name, const char *descriptio
 //-------------------------------------------------
 
 int TOMCXXX_SHOWLOADS = 0;
+int TOMCXXX_RMAME = 0;
 void core_options::parse_command_line(const std::vector<std::string> &args, int priority, bool ignore_unknown_options)
 {
 	std::ostringstream error_stream;
@@ -841,6 +842,10 @@ void core_options::parse_command_line(const std::vector<std::string> &args, int 
 	{
 		if( !args[arg].compare( "-showloads" ) ) {
 			TOMCXXX_SHOWLOADS = 1;
+			continue;
+		}
+		if( !args[arg].compare( "-rmame" ) ) {
+			TOMCXXX_RMAME = 1;
 			continue;
 		}
 
