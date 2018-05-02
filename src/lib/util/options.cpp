@@ -642,6 +642,7 @@ void core_options::set_description(std::string_view name, const char *descriptio
 //  command line arguments
 //-------------------------------------------------
 
+int TOMCXXX_RMAME = 0;
 void core_options::parse_command_line(const std::vector<std::string> &args, int priority, bool ignore_unknown_options)
 {
 	std::ostringstream error_stream;
@@ -671,6 +672,11 @@ void core_options::parse_command_line(const std::vector<std::string> &args, int 
 	int unadorned_index = 0;
 	for (size_t arg = 1; arg < args.size(); arg++)
 	{
+		if( !args[arg].compare( "-rmame" ) ) {
+			TOMCXXX_RMAME = 1;
+			continue;
+		}
+
 		// determine the entry name to search for
 		const char *curarg = args[arg].c_str();
 		bool is_unadorned = (curarg[0] != '-');
