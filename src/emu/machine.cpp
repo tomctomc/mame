@@ -135,6 +135,7 @@ std::string running_machine::describe_context() const
 //  start - initialize the emulated machine
 //-------------------------------------------------
 
+extern int TOMCXXX_RMAME;
 void running_machine::start()
 {
 	// initialize basic can't-fail systems here
@@ -207,6 +208,11 @@ void running_machine::start()
 	// resolve objects that are created by memory maps
 	for (device_t &device : device_enumerator(root_device()))
 		device.resolve_post_map();
+
+	if( TOMCXXX_RMAME ) {
+		osd_printf_info("TOMCXXX: rmame bailing\n");
+		exit(1);
+	}
 
 	// register callbacks for the devices, then start them
 	add_notifier(MACHINE_NOTIFY_RESET, machine_notify_delegate(&running_machine::reset_all_devices, this));
