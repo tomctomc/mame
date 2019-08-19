@@ -181,7 +181,7 @@ static imgtoolerr_t basic_writefile(const basictokens *tokens,
 	int eof = false;
 	uint32_t len;
 	char c;
-	int i, j, pos, in_quotes;
+	int i, j, pos, in_quotes, in_data;
 	uint16_t line_number;
 	uint8_t line_header[4];
 	uint8_t file_size[2];
@@ -263,6 +263,8 @@ static imgtoolerr_t basic_writefile(const basictokens *tokens,
 			/* when we start out, we are not within quotation marks */
 			in_quotes = false;
 
+            in_data = false;
+
 			/* read until end of line */
 			while(buf[pos] != '\0')
 			{
@@ -275,7 +277,7 @@ static imgtoolerr_t basic_writefile(const basictokens *tokens,
 					/* flip quotation status */
 					in_quotes = !in_quotes;
 				}
-				else if (!in_quotes)
+				else if (!(in_quotes || in_data))
 				{
 					for (i = 0; (token == nullptr) && (i < tokens->num_entries); i++)
 					{
@@ -289,6 +291,14 @@ static imgtoolerr_t basic_writefile(const basictokens *tokens,
 								token_shift = token_table->shift;
 								token_value = token_table->base + j;
 								pos += strlen(token);
+
+                                // don't tokenize between "data" and ":" (or end of line)
+                                if (!strncmp("DATA", token_table->tokens[j], strlen(token_table->tokens[j]))) {
+                                    in_data = true;
+                                }
+                                if (!strncmp(":", token_table->tokens[j], strlen(token_table->tokens[j]))) {
+                                    in_data = false;
+                                }
 								found = true;
 								break;
 							}
