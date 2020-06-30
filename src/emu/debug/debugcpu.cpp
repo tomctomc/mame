@@ -100,6 +100,52 @@ debugger_cpu::debugger_cpu(running_machine &machine)
 
 
 /*-------------------------------------------------
+    read_opcode - read 1,2,4 or 8 bytes at the
+    given offset from opcode space
+-------------------------------------------------*/
+
+u64 debugger_cpu::read_opcode(address_space &space, offs_t address, int size)
+{
+	device_memory_interface &memory = space.device().memory();
+
+	u64 result = ~u64(0) & (~u64(0) >> (64 - 8*size));
+
+	/* keep in logical range */
+	address &= space.logaddrmask();
+
+	/* translate to physical first */
+	if (!memory.translate(space.spacenum(), TRANSLATE_FETCH_DEBUG, address))
+		return result;
+
+	/* keep in physical range */
+	address &= space.addrmask();
+
+	/* switch off the size and handle unaligned accesses */
+	switch (size)
+	{
+		case 1:
+			result = space.read_byte(address);
+			break;
+
+		case 2:
+			result = space.read_word_unaligned(address);
+			break;
+
+		case 4:
+			result = space.read_dword_unaligned(address);
+			break;
+
+		case 6:
+		case 8:
+			result = space.read_qword_unaligned(address);
+			break;
+	}
+
+	return result;
+}
+
+
+/*-------------------------------------------------
     flush_traces - flushes all traces; this is
     useful if a trace is going on when we
     fatalerror
