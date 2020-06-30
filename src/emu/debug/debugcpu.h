@@ -385,6 +385,8 @@ public:
 	// load all comments for a given machine
 	bool comment_load(bool is_inline);
 
+	/* read 1,2,4 or 8 bytes at the given offset from opcode space */
+	u64 read_opcode(address_space &space, offs_t offset, int size);
 
 	// getters
 	bool within_instruction_hook() const { return m_within_instruction_hook; }
