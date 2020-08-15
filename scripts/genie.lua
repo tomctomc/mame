@@ -569,6 +569,7 @@ if _OPTIONS["PROFILER"]~="0" then
 end
 configuration { "Debug", "linux-gcc" }
 	buildoptions {
+		"-Wno-deprecated",
 		"-ggdb",
 		"-O0",
 	}
