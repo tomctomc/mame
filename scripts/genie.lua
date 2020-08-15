@@ -631,6 +631,7 @@ configuration { "Debug" }
 	}
 configuration { "Debug", "linux-gcc" }
 	buildoptions {
+		"-Wno-deprecated",
 		"-ggdb",
 		"-O0",
 	}
