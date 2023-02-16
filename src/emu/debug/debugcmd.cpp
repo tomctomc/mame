@@ -55,8 +55,10 @@ const size_t debugger_commands::MAX_GLOBALS = 1000;
 
 bool debugger_commands::cheat_address_is_valid(address_space &space, offs_t address)
 {
+	return true; /* TOMCXXX
 	address_space *tspace;
 	return space.device().memory().translate(space.spacenum(), device_memory_interface::TR_READ, address, tspace) && (tspace->get_write_ptr(address) != nullptr);
+    TOMCXXX */
 }
 
 
