@@ -1077,6 +1077,7 @@ void device_debug::wait_hook()
 			machine.debugger().console().printf("CPU waiting after PC=%s\n", m_state->state_string(STATE_GENPCBASE));
 			m_was_waiting = true;
 		}
+        machine.debugger().refresh_display(); // TOMCXXX keep refreshing screen even if cpu stopped
 		debugcpu.wait_for_debugger(m_device);
 	}
 
