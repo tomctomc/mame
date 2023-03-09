@@ -984,6 +984,7 @@ void device_debug::instruction_hook(offs_t curpc)
 				machine.debug_view().update_all(DVT_STATE);
 				machine.debugger().refresh_display();
 			}
+            else machine.debugger().refresh_display(); // TOMCXXX keep refreshing screen even if cpu stopped
 
 			// check for commands in the source file
 			machine.debugger().console().process_source_file();
