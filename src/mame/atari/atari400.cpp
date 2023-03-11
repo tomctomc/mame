@@ -2120,8 +2120,8 @@ void a800_state::a800(machine_config &config)
 
 	// TODO: confirm all of the official config
 	// 8K release model, 48K possible here?
-	m_ram->set_default_size("16K");
-	m_ram->set_extra_options("8K,48K");
+	m_ram->set_default_size("48K"); // TOMCXXX
+	m_ram->set_extra_options("8K,16K"); // TOMCXXX
 }
 
 
