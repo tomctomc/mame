@@ -321,6 +321,28 @@ const char_info charinfo[] =
 //  NATURAL KEYBOARD
 //**************************************************************************
 
+static bool TOMCXXX_prompt_active;
+static bool TOMCXXX_need_notify;
+static bool TOMCXXX_first_notify_happened;
+#define COCO_BASIC_12_CURSOR 0xa1b3
+#define COCO_BASIC_10_KEYIN  0xa1c1
+#define COCO_BASIC_12_KEYIN  0xa1cb
+void TOMCXXX_check_activate_prompt(device_t &device, offs_t curpc)
+{
+    if( curpc == COCO_BASIC_12_KEYIN ) {
+        // TOMCXXX should further check that it's a coco here ...  if( device().machine().
+        if( !TOMCXXX_prompt_active ) {
+            TOMCXXX_prompt_active = true;
+            TOMCXXX_need_notify   = true;
+            if( !TOMCXXX_first_notify_happened ) {
+                TOMCXXX_first_notify_happened = true;
+                // must do first notification here (others done in timer() after posts)
+                device.machine().call_notifiers(MACHINE_NOTIFY_PROMPT);
+            }
+        }
+    }
+}
+
 //-------------------------------------------------
 //  natural_keyboard - constructor
 //-------------------------------------------------
@@ -341,6 +363,8 @@ natural_keyboard::natural_keyboard(running_machine &machine)
 	, m_accept_char()
 	, m_charqueue_empty()
 {
+    TOMCXXX_prompt_active = false;
+
 	// try building a list of keycodes; if none are available, don't bother
 	build_codes();
 	if (!m_keyboards.empty())
@@ -808,7 +832,7 @@ attotime natural_keyboard::choose_delay(char32_t ch)
 		return attotime::from_msec(10);
 
 	// otherwise, default to constant delay with a longer delay on CR
-	return attotime::from_msec((ch == '\r') ? 200 : 50);
+	return attotime::from_msec(33); //TOMCXXXX return attotime::from_msec((ch == '\r') ? 200 : 50);
 }
 
 
@@ -842,7 +866,6 @@ void natural_keyboard::internal_post(char32_t ch)
 	m_bufend = (m_bufend + 1) % size;
 }
 
-
 //-------------------------------------------------
 //  timer - timer callback to keep things flowing
 //  when posting a string of characters
@@ -850,6 +873,14 @@ void natural_keyboard::internal_post(char32_t ch)
 
 void natural_keyboard::timer(s32 param)
 {
+    if( !TOMCXXX_prompt_active ) {
+        // just wait for next timer expire
+        if (!empty())
+            m_timer->adjust(choose_delay(m_buffer[m_bufbegin]));
+        return;
+    }
+    TOMCXXX_prompt_active = false;
+
 	if (!m_queue_chars.isnull())
 	{
 		// the driver has a queue_chars handler
@@ -905,6 +936,13 @@ void natural_keyboard::timer(s32 param)
 	// need to make sure timerproc is called again if buffer not empty
 	if (!empty())
 		m_timer->adjust(choose_delay(m_buffer[m_bufbegin]));
+
+    if( TOMCXXX_need_notify ) {
+        if(empty()) {
+            TOMCXXX_need_notify = false;
+            machine().call_notifiers(MACHINE_NOTIFY_PROMPT);
+        }
+    }
 }
 
 
