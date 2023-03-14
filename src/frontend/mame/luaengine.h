@@ -192,6 +192,7 @@ private:
 	void on_machine_stop();
 	void on_machine_pause();
 	void on_machine_resume();
+	void on_machine_prompt();
 	void on_machine_frame();
 	void on_machine_presave();
 	void on_machine_postload();

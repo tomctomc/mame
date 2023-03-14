@@ -676,6 +676,11 @@ void lua_engine::on_machine_resume()
 	execute_function("LUA_ON_RESUME");
 }
 
+void lua_engine::on_machine_prompt()
+{
+	execute_function("LUA_ON_PROMPT");
+}
+
 void lua_engine::on_machine_frame()
 {
 	std::vector<int> tasks = std::move(m_frame_tasks);
@@ -761,6 +766,7 @@ void lua_engine::attach_notifiers()
 	machine().add_notifier(MACHINE_NOTIFY_EXIT, machine_notify_delegate(&lua_engine::on_machine_stop, this));
 	machine().add_notifier(MACHINE_NOTIFY_PAUSE, machine_notify_delegate(&lua_engine::on_machine_pause, this));
 	machine().add_notifier(MACHINE_NOTIFY_RESUME, machine_notify_delegate(&lua_engine::on_machine_resume, this));
+	machine().add_notifier(MACHINE_NOTIFY_PROMPT, machine_notify_delegate(&lua_engine::on_machine_prompt, this));
 	machine().add_notifier(MACHINE_NOTIFY_FRAME, machine_notify_delegate(&lua_engine::on_machine_frame, this));
 	machine().save().register_presave(save_prepost_delegate(FUNC(lua_engine::on_machine_presave), this));
 	machine().save().register_postload(save_prepost_delegate(FUNC(lua_engine::on_machine_postload), this));
@@ -812,6 +818,7 @@ void lua_engine::initialize()
  * emu.register_stop(callback) - register callback after stopping
  * emu.register_pause(callback) - register callback at pause
  * emu.register_resume(callback) - register callback at resume
+ * emu.register_prompt(callback) - register callback when basic prompt is active (TOMCXXX)
  * emu.register_frame(callback) - register callback at end of frame
  * emu.register_frame_done(callback) - register callback after frame is drawn to screen (for overlays)
  * emu.register_sound_update(callback) - register callback after sound update has generated new samples
@@ -934,6 +941,7 @@ void lua_engine::initialize()
 	emu["register_stop"] = [this] (sol::function func) { osd_printf_warning("[LUA] emu.register_stop is deprecated - please use emu.add_machine_stop_notifier\n"); register_function(func, "LUA_ON_STOP"); };
 	emu["register_pause"] = [this] (sol::function func) { osd_printf_warning("[LUA] emu.register_pause is deprecated - please use emu.add_machine_pause_notifier\n"); register_function(func, "LUA_ON_PAUSE"); };
 	emu["register_resume"] = [this] (sol::function func) { osd_printf_warning("[LUA] emu.register_resume is deprecated - please use emu.add_machine_resume_notifier\n"); register_function(func, "LUA_ON_RESUME"); };
+	emu["register_prompt"] = [this] (sol::function func) { osd_printf_warning("[LUA] emu.register_prompt is deprecated - please use emu.add_machine_prompt_notifier\n"); register_function(func, "LUA_ON_PROMPT"); };
 	emu["register_frame"] = [this] (sol::function func) { osd_printf_warning("[LUA] emu.register_frame is deprecated - please use emu.add_machine_frame_notifier\n"); register_function(func, "LUA_ON_FRAME"); };
 	emu["register_frame_done"] = [this] (sol::function func) { register_function(func, "LUA_ON_FRAME_DONE"); };
 	emu["register_sound_update"] = [this] (sol::function func) { register_function(func, "LUA_ON_SOUND_UPDATE"); };
