@@ -117,7 +117,8 @@ u64 debugger_cpu::read_opcode(address_space &space, offs_t address, int size)
 	address &= space.logaddrmask();
 
 	/* translate to physical first */
-	if (!memory.translate(space.spacenum(), TRANSLATE_FETCH_DEBUG, address))
+    address_space *dummyspace;
+    if (!memory.translate(space.spacenum(), device_memory_interface::TR_FETCH, address, dummyspace))
 		return result;
 
 	/* keep in physical range */
