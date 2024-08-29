@@ -846,6 +846,7 @@ void core_options::parse_command_line(const std::vector<std::string> &args, int 
 		}
 		if( !args[arg].compare( "-rmame" ) ) {
 			TOMCXXX_RMAME = 1;
+			TOMCXXX_SHOWLOADS = 1; // need showloads too for rmame (so calling script can determine rom filename)
 			continue;
 		}
 
